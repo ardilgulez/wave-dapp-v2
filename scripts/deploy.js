@@ -14,12 +14,51 @@ async function main() {
     // await hre.run('compile');
 
     // We get the contract to deploy
+
+    // const Greeter = await hre.ethers.getContractFactory("Greeter");
+    // const greeter = await Greeter.deploy("HELLO HARDHAT");
+    // await greeter.deployed();
+    // console.log("Greeter deployed to: ", greeter.address);
+    // console.log(await greeter.greet());
+
+    const [deployer, acc2] = await ethers.getSigners();
+
+    console.log(`Deployer address: ${deployer.address}`);
+
+    const KAGToken = await hre.ethers.getContractFactory("KAGToken");
+    const kagToken = await KAGToken.connect(deployer).deploy(
+        hre.ethers.utils.parseEther("10000")
+    );
+
+    await kagToken.deployed();
+
+    console.log("KAGToken deployed to: ", kagToken.address);
+
+    console.log(await kagToken.totalSupply());
+
     const WaveContract = await hre.ethers.getContractFactory("WaveContract");
-    const waveContract = await WaveContract.deploy("Hello, Hardhat!");
+    const waveContract = await WaveContract.connect(deployer).deploy(
+        kagToken.address
+    );
 
     await waveContract.deployed();
+    console.log("WaveContract deployed to: ", waveContract.address);
 
-    console.log("WaveContract deployed to:", waveContract.address);
+    await kagToken.connect(deployer).makeMinter(waveContract.address);
+
+    let deployerKagBalance = await kagToken.balanceOf(deployer.address);
+    console.log(`Deployer KAG Balance is: ${deployerKagBalance}`);
+    let waveContractKagBalance = await kagToken.balanceOf(waveContract.address);
+    console.log(`Wave Contract KAG Balance is: ${waveContractKagBalance}`);
+
+    await kagToken
+        .connect(deployer)
+        .transfer(waveContract.address, deployerKagBalance);
+
+    deployerKagBalance = await kagToken.balanceOf(deployer.address);
+    console.log(`Deployer KAG Balance is: ${deployerKagBalance}`);
+    waveContractKagBalance = await kagToken.balanceOf(waveContract.address);
+    console.log(`Wave Contract KAG Balance is: ${waveContractKagBalance}`);
 }
 
 // We recommend this pattern to be able to use async/await everywhere

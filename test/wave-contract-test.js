@@ -11,7 +11,7 @@ describe("WaveContract", function () {
         console.log(deployer.address);
 
         const KAGToken = await ethers.getContractFactory("KAGToken");
-        kagToken = await KAGToken.deploy(ethers.utils.parseEther("10000"));
+        kagToken = await KAGToken.deploy(100);
         await kagToken.deployed();
         console.log(
             `KAGToken is successfully deployed to: ${kagToken.address}`
@@ -27,7 +27,7 @@ describe("WaveContract", function () {
 
         const transferBalanceTX = await kagToken.transfer(
             waveContract.address,
-            ethers.utils.parseEther("10000")
+            100
         );
 
         // wait until the transaction is mined
@@ -38,9 +38,7 @@ describe("WaveContract", function () {
         const [deployer] = await ethers.getSigners();
         expect(await waveContract.owner()).to.equal(deployer.address);
         expect(await kagToken.balanceOf(deployer.address)).to.equal(0);
-        expect(await kagToken.balanceOf(waveContract.address)).to.equal(
-            ethers.utils.parseEther("10000")
-        );
+        expect(await kagToken.balanceOf(waveContract.address)).to.equal(100);
     });
 
     it("Should be able to wave with ether", async () => {

@@ -82,8 +82,10 @@ describe("WaveContract", function () {
         const amountWavedByDeployer = await waveContract.amountWavedBy(
             deployer.address
         );
-        expect(amountWavedByDeployer.toBigInt() == ethers.utils.parseEther("0"))
-            .to.be.true;
+        expect(
+            amountWavedByDeployer.toBigInt() ===
+                ethers.utils.parseEther("0").toBigInt()
+        ).to.be.true;
 
         const waveCountOfDeployer = await waveContract.waveCountOf(
             deployer.address
@@ -96,7 +98,7 @@ describe("WaveContract", function () {
 
     it("Should be able to receive KAG tokens after waving with value", async () => {
         const [deployer] = await ethers.getSigners();
-        const waveTxn = await waveContract.wave("Hi there!", {
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
             value: ethers.utils.parseEther("1"),
         });
         const receipt = await waveTxn.wait();
@@ -111,8 +113,10 @@ describe("WaveContract", function () {
         const amountWavedByDeployer = await waveContract.amountWavedBy(
             deployer.address
         );
-        expect(amountWavedByDeployer.toBigInt() == ethers.utils.parseEther("1"))
-            .to.be.true;
+        expect(
+            amountWavedByDeployer.toBigInt() ===
+                ethers.utils.parseEther("1").toBigInt()
+        ).to.be.true;
 
         const waveCountOfDeployer = await waveContract.waveCountOf(
             deployer.address
@@ -149,5 +153,22 @@ describe("WaveContract", function () {
         await expect(waveContract.connect(acc2).withdraw()).to.be.revertedWith(
             "Ownable: caller is not the owner"
         );
+    });
+
+    it("Should list waves", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const waves = await waveContract.getWaves();
+        expect(waves.length).to.equal(1);
+        const wave = waves[0];
+        expect(wave.from).to.equal(deployer.address);
+        expect(
+            wave.amount.toBigInt() ===
+                ethers.utils.parseEther("1000").toBigInt()
+        ).to.be.true;
     });
 });

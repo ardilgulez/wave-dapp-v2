@@ -13,7 +13,7 @@ contract WaveContract is Ownable {
         uint256 timestamp;
     }
 
-    Wave[] waves;
+    Wave[] private waves;
     event NewWave(
         address indexed _from,
         string _message,
@@ -21,8 +21,8 @@ contract WaveContract is Ownable {
         uint256 _timestamp
     );
 
-    KAGToken kagToken;
-    address _tokenAddress;
+    KAGToken private kagToken;
+    address private _tokenAddress;
 
     uint256 private waveCount;
     mapping(address => uint256) private walletToWaveCount;
@@ -50,6 +50,10 @@ contract WaveContract is Ownable {
             kagToken.transfer(msg.sender, 1);
         }
         emit NewWave(msg.sender, _message, msg.value, block.timestamp);
+    }
+
+    function getWaves() external view returns (Wave[] memory) {
+        return waves;
     }
 
     function waveCountOf(address account) external view returns (uint256) {

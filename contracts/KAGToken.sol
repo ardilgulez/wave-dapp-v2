@@ -11,9 +11,13 @@ contract KAGToken is ERC20, AccessControl {
     constructor(uint256 initialSupply) ERC20("KAG", "KAG Token") {
         _mint(msg.sender, initialSupply);
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
+        grantRole(MINTER_ROLE, msg.sender);
     }
 
-    function mint(address account, uint256 amount) public {
+    function mint(address account, uint256 amount)
+        public
+        onlyRole(MINTER_ROLE)
+    {
         _mint(account, amount);
     }
 

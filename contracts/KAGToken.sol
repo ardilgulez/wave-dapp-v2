@@ -14,6 +14,10 @@ contract KAGToken is ERC20, AccessControl {
         grantRole(MINTER_ROLE, msg.sender);
     }
 
+    function decimals() public pure override returns (uint8) {
+        return 0;
+    }
+
     function mint(address account, uint256 amount)
         public
         onlyRole(MINTER_ROLE)

@@ -1,25 +1,50 @@
-import logo from "./logo.svg";
+import { ethers } from "ethers";
+import { useEffect, useState } from "react";
+import NavBar from "./components/NavBar";
+
 import "./App.css";
 
-function App() {
+const App = () => {
+    const [account, setAccount] = useState(null);
+    const connectWallet = async () => {
+        const { ethereum } = window;
+        if (!ethereum) {
+            console.log("Metamask not connected");
+        } else {
+            const accounts = await ethereum.request({
+                method: "eth_requestAccounts",
+            });
+            setAccount(accounts[0]);
+        }
+    };
+
+    const checkUserAccounts = async () => {
+        const { ethereum } = window;
+        if (!ethereum) {
+            console.log("Metamask not connected");
+        } else {
+            let accounts = await ethereum.request({
+                method: "eth_accounts",
+            });
+            setAccount(accounts[0]);
+
+            ethereum.on("accountsChanged", async () => {
+                accounts = await ethereum.enable();
+                const account = accounts[0];
+                setAccount(account);
+            });
+        }
+    };
+
+    useEffect(() => {
+        checkUserAccounts();
+    });
+
     return (
         <div className="App">
-            <header className="App-header">
-                <img src={logo} className="App-logo" alt="logo" />
-                <p>
-                    Edit <code>src/App.js</code> and save to reload.
-                </p>
-                <a
-                    className="App-link"
-                    href="https://reactjs.org"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                >
-                    Learn React
-                </a>
-            </header>
+            <NavBar account={account} connectWallet={connectWallet} />
         </div>
     );
-}
+};
 
 export default App;

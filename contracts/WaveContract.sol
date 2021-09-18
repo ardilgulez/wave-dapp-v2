@@ -49,6 +49,10 @@ contract WaveContract is Ownable {
         if (msg.value > 0) {
             kagToken.transfer(msg.sender, 1);
         }
+
+        if (kagToken.balanceOf(address(this)) < 1000) {
+            kagToken.mint(address(this), 1000);
+        }
         emit NewWave(msg.sender, _message, msg.value, block.timestamp);
     }
 

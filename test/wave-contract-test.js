@@ -4,6 +4,7 @@ const { ethers } = require("hardhat");
 describe("WaveContract", function () {
     let kagToken;
     let waveContract;
+    const INITIAL_KAG_AMOUNT = 1000;
 
     beforeEach(async () => {
         const [deployer] = await ethers.getSigners();
@@ -11,7 +12,7 @@ describe("WaveContract", function () {
         console.log(deployer.address);
 
         const KAGToken = await ethers.getContractFactory("KAGToken");
-        kagToken = await KAGToken.deploy(100);
+        kagToken = await KAGToken.deploy(INITIAL_KAG_AMOUNT);
         await kagToken.deployed();
         console.log(
             `KAGToken is successfully deployed to: ${kagToken.address}`
@@ -25,9 +26,11 @@ describe("WaveContract", function () {
             `WaveContract is successfully deployed to: ${waveContract.address}`
         );
 
+        const makeMinterTxn = kagToken.makeMinter(waveContract.address);
+
         const transferBalanceTX = await kagToken.transfer(
             waveContract.address,
-            100
+            INITIAL_KAG_AMOUNT
         );
 
         // wait until the transaction is mined
@@ -38,7 +41,9 @@ describe("WaveContract", function () {
         const [deployer] = await ethers.getSigners();
         expect(await waveContract.owner()).to.equal(deployer.address);
         expect(await kagToken.balanceOf(deployer.address)).to.equal(0);
-        expect(await kagToken.balanceOf(waveContract.address)).to.equal(100);
+        expect(await kagToken.balanceOf(waveContract.address)).to.equal(
+            INITIAL_KAG_AMOUNT
+        );
     });
 
     it("Should be able to wave with ether", async () => {
@@ -168,5 +173,18 @@ describe("WaveContract", function () {
             wave.amount.toBigInt() ===
                 ethers.utils.parseEther("1000").toBigInt()
         ).to.be.true;
+    });
+
+    it("Should WaveContract mint new KAGTokens when it has a balance of lower than 1000", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const waveContractKagBalance = await kagToken.balanceOf(
+            waveContract.address
+        );
+        expect(waveContractKagBalance).to.equal(1999);
     });
 });

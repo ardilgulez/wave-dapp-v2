@@ -1,48 +1,27 @@
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
+import Stats from "./components/Stats";
 
 import "./App.css";
+import WaveBox from "./components/WaveBox";
+import { connectWallet, checkUserAccounts } from "./metamask-utils";
 
 const App = () => {
     const [account, setAccount] = useState(null);
-    const connectWallet = async () => {
-        const { ethereum } = window;
-        if (!ethereum) {
-            console.log("Metamask not connected");
-        } else {
-            const accounts = await ethereum.request({
-                method: "eth_requestAccounts",
-            });
-            setAccount(accounts[0]);
-        }
-    };
-
-    const checkUserAccounts = async () => {
-        const { ethereum } = window;
-        if (!ethereum) {
-            console.log("Metamask not connected");
-        } else {
-            let accounts = await ethereum.request({
-                method: "eth_accounts",
-            });
-            setAccount(accounts[0]);
-
-            ethereum.on("accountsChanged", async () => {
-                accounts = await ethereum.enable();
-                const account = accounts[0];
-                setAccount(account);
-            });
-        }
-    };
 
     useEffect(() => {
-        checkUserAccounts();
+        checkUserAccounts(window, setAccount)();
     });
 
     return (
         <div className="App">
-            <NavBar account={account} connectWallet={connectWallet} />
+            <NavBar
+                account={account}
+                connectWallet={connectWallet(window, setAccount)}
+            />
+            <Stats />
+            <WaveBox />
         </div>
     );
 };

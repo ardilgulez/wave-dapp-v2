@@ -5,7 +5,6 @@ import Button from "react-bootstrap/Button";
 import "./NavBar.css";
 
 const NavBar = ({ account, connectWallet }) => {
-    console.log(account);
     return (
         <Navbar bg="dark" variant="dark">
             <Container>

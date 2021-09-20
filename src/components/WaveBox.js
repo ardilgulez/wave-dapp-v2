@@ -8,7 +8,7 @@ import "./WaveBox.css";
 
 const WaveBox = () => {
     return (
-        <Container>
+        <Container className="wave-box-container">
             <Row>
                 <Col md={{ span: 6, offset: 3 }}>
                     <Form>
@@ -23,7 +23,10 @@ const WaveBox = () => {
                             </Form.Label>
                             <Row>
                                 <Col md={6}>
-                                    <Form.Control placeholder="Amount" />
+                                    <Form.Control
+                                        type="number"
+                                        placeholder="Amount"
+                                    />
                                 </Col>
                                 <Col md={6}>
                                     <Form.Select aria-label="Default select example">

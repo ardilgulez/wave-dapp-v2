@@ -1,0 +1,27 @@
+.card-text {
+    color: black;
+}
+
+.card-title {
+    color: black;
+    padding: 15px 15px 0 15px;
+}
+
+.wave-row {
+    margin-top: 20px !important;
+}
+
+.title-wrapper {
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wave-from {
+    font-size: 0.875rem;
+}
+
+.wave-timestamp {
+    font-size: 0.75rem;
+}

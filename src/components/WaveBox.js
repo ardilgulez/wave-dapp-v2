@@ -6,7 +6,25 @@ import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import "./WaveBox.css";
 
-const WaveBox = () => {
+const WaveBox = ({ setWaveContent, sendWave }) => {
+    const onMessageChange = (e) => {
+        setWaveContent((oldWaveContent) => {
+            return Object.assign(oldWaveContent, { message: e.target.value });
+        });
+    };
+
+    const onAmountChange = (e) => {
+        setWaveContent((oldWaveContent) => {
+            return Object.assign(oldWaveContent, { amount: e.target.value });
+        });
+    };
+
+    const onUnitsChange = (e) => {
+        setWaveContent((oldWaveContent) => {
+            return Object.assign(oldWaveContent, { units: e.target.value });
+        });
+    };
+
     return (
         <Container className="wave-box-container">
             <Row>
@@ -14,7 +32,11 @@ const WaveBox = () => {
                     <Form>
                         <Form.Group className="mb-3">
                             <Form.Label>Send me a Message!</Form.Label>
-                            <Form.Control as="textarea" rows={3} />
+                            <Form.Control
+                                as="textarea"
+                                rows={3}
+                                onChange={onMessageChange}
+                            />
                         </Form.Group>
                         <Form.Group className="mb-3">
                             <Form.Label>
@@ -26,10 +48,14 @@ const WaveBox = () => {
                                     <Form.Control
                                         type="number"
                                         placeholder="Amount"
+                                        onChange={onAmountChange}
                                     />
                                 </Col>
                                 <Col md={6}>
-                                    <Form.Select aria-label="Default select example">
+                                    <Form.Select
+                                        aria-label="Default select example"
+                                        onChange={onUnitsChange}
+                                    >
                                         <option value="ether">Ether</option>
                                         <option value="gwei">Gwei</option>
                                         <option value="wei">Wei</option>
@@ -42,7 +68,7 @@ const WaveBox = () => {
                                 <Col md={{ span: 4, offset: 4 }}>
                                     <Button
                                         variant="light"
-                                        // style={{ width: "100%" }}
+                                        onClick={sendWave}
                                         className="send-button"
                                     >
                                         Send

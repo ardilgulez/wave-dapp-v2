@@ -7,6 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract WaveContract is Ownable {
     struct Wave {
+        uint256 id;
         address from;
         string message;
         uint256 amount;
@@ -15,6 +16,7 @@ contract WaveContract is Ownable {
 
     Wave[] private waves;
     event NewWave(
+        uint256 _id,
         address indexed _from,
         string _message,
         uint256 _amount,
@@ -37,6 +39,7 @@ contract WaveContract is Ownable {
     function wave(string calldata _message) external payable {
         waves.push(
             Wave({
+                id: waveCount,
                 from: msg.sender,
                 message: _message,
                 amount: msg.value,
@@ -45,7 +48,6 @@ contract WaveContract is Ownable {
         );
         walletToWaveCount[msg.sender] += 1;
         walletToAmount[msg.sender] += msg.value;
-        waveCount += 1;
         if (msg.value > 0) {
             kagToken.transfer(msg.sender, 1);
         }
@@ -53,7 +55,14 @@ contract WaveContract is Ownable {
         if (kagToken.balanceOf(address(this)) < 1000) {
             kagToken.mint(address(this), 1000);
         }
-        emit NewWave(msg.sender, _message, msg.value, block.timestamp);
+        emit NewWave(
+            waveCount,
+            msg.sender,
+            _message,
+            msg.value,
+            block.timestamp
+        );
+        waveCount += 1;
     }
 
     function getWaves() external view returns (Wave[] memory) {

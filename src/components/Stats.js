@@ -26,7 +26,7 @@ const Stats = ({ totalWaveCount }) => {
                         <h2 className="stats-title">Loudest Wavers:</h2>
                         <p className="stats-item">5 times</p>
                         <p className="stats-item">
-                            0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266 : 3 times
+                            0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
                         </p>
                     </Col>
                 </Row>

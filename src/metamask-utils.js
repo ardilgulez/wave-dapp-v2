@@ -18,7 +18,7 @@ export const connectWallet = (setAccount) => async () => {
     }
 };
 
-export const checkUserAccounts = (setAccount) => async () => {
+export const checkUserAccounts = async (callback) => {
     console.log(process.env);
     const { ethereum } = window;
     if (!ethereum) {
@@ -27,23 +27,23 @@ export const checkUserAccounts = (setAccount) => async () => {
         let accounts = await ethereum.request({
             method: "eth_accounts",
         });
-        setAccount(accounts[0]);
+        callback(accounts[0]);
 
         ethereum.on("accountsChanged", async () => {
             accounts = await ethereum.enable();
             const account = accounts[0];
-            setAccount(account);
+            callback(account);
         });
 
         ethereum.on("connect", async () => {
             accounts = await ethereum.enable();
             const account = accounts[0];
-            setAccount(account);
+            callback(account);
         });
     }
 };
 
-export const getTotalWaveCount = (setTotalWaveCount) => async () => {
+export const getTotalWaveCount = async (setTotalWaveCount) => {
     const { ethereum } = window;
     if (!ethereum) {
         console.log("Metamask not connected");
@@ -77,7 +77,7 @@ export const getKagTokenAddress = (setKagTokenAddress) => async () => {
     }
 };
 
-const wave = async ({ message, amount, unit }) => {
+export const wave = async ({ message, amount, unit }) => {
     const { ethereum } = window;
     if (!ethereum) {
         console.log("Metamask not connected");
@@ -93,6 +93,62 @@ const wave = async ({ message, amount, unit }) => {
             value: ethers.utils.parseUnits(amount.toString(), unit),
         });
         const receipt = await waveTxn.wait();
-        return new Promise(receipt);
+        return new Promise((resolve, reject) => {
+            resolve(receipt);
+        });
+    }
+};
+
+export const getWaves = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const waves = await waveContract.getWaves();
+        return new Promise((resolve, reject) => {
+            resolve([...waves].reverse());
+        });
+    }
+};
+
+export const subscribeToNewWaves = async (setWaves) => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const addIfNotExists = (waves, newWave) => {
+            const ids = waves.map((wave) => wave.id.toNumber());
+            if (ids.indexOf(newWave.id.toNumber()) < 0) {
+                return [newWave, ...waves];
+            } else {
+                return waves;
+            }
+        };
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        waveContract.on("NewWave", (id, from, message, amount, timestamp) => {
+            console.log(id, from, message, amount, timestamp);
+            setWaves((oldWaves) =>
+                addIfNotExists(oldWaves, {
+                    id,
+                    from,
+                    message,
+                    amount,
+                    timestamp,
+                })
+            );
+        });
     }
 };

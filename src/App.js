@@ -9,6 +9,9 @@ import {
     connectWallet,
     checkUserAccounts,
     getTotalWaveCount,
+    wave,
+    subscribeToNewWaves,
+    getWaves,
 } from "./metamask-utils";
 
 const App = () => {
@@ -21,12 +24,27 @@ const App = () => {
         units: "ether",
     });
 
-    useEffect(() => {
-        checkUserAccounts(setAccount)();
-    });
+    const sendWave = () => {
+        wave(waveContent).then((receipt) => {
+            console.log(receipt);
+            setWaveContent({
+                message: "",
+                amount: 0,
+                units: "ether",
+            });
+        });
+    };
 
     useEffect(() => {
-        getTotalWaveCount(setTotalWaveCount)();
+        checkUserAccounts((account) => {
+            setAccount(account);
+            subscribeToNewWaves(setWaves);
+        });
+    }, []);
+
+    useEffect(() => {
+        getTotalWaveCount(setTotalWaveCount);
+        getWaves().then((waves) => setWaves(waves));
     }, [account]);
 
     return (
@@ -36,7 +54,7 @@ const App = () => {
                 connectWallet={connectWallet(setAccount)}
             />
             <Stats totalWaveCount={totalWaveCount} />
-            <WaveBox setWaveContent={setWaveContent} />
+            <WaveBox setWaveContent={setWaveContent} sendWave={sendWave} />
             <WaveList waves={waves} />
         </div>
     );

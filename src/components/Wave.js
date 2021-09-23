@@ -6,7 +6,6 @@ import Row from "react-bootstrap/Row";
 import "./Wave.css";
 
 const parseDate = (timestamp) => {
-    console.log(timestamp);
     const date = new Date(timestamp * 1000);
     const day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
     const month =

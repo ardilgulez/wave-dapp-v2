@@ -72,6 +72,10 @@ contract WaveContract is Ownable {
         return waveCount;
     }
 
+    function kagTokenAddress() external view returns (address) {
+        return _tokenAddress;
+    }
+
     function withdraw() public onlyOwner {
         payable(msg.sender).transfer(address(this).balance);
     }

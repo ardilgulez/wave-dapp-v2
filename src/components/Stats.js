@@ -6,14 +6,14 @@ import Row from "react-bootstrap/Row";
 
 import "./Stats.css";
 
-const Stats = () => {
+const Stats = ({ totalWaveCount }) => {
     return (
         <div className="stats">
             <Container>
                 <Row>
                     <Col lg={4} className="stats-column">
                         <h2 className="stats-title">Total Waves:</h2>
-                        <p className="wave-count">16</p>
+                        <p className="wave-count">{totalWaveCount}</p>
                     </Col>
                     <Col lg={4} className="stats-column">
                         <h2 className="stats-title">Biggest Waver:</h2>

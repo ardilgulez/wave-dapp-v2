@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import { useEffect, useState } from "react";
 import NavBar from "./components/NavBar";
 import Stats from "./components/Stats";
@@ -6,36 +5,38 @@ import WaveList from "./components/WaveList";
 
 import "./App.css";
 import WaveBox from "./components/WaveBox";
-import { connectWallet, checkUserAccounts } from "./metamask-utils";
+import {
+    connectWallet,
+    checkUserAccounts,
+    getTotalWaveCount,
+} from "./metamask-utils";
 
 const App = () => {
     const [account, setAccount] = useState(null);
-
-    useEffect(() => {
-        checkUserAccounts(window, setAccount)();
+    const [totalWaveCount, setTotalWaveCount] = useState(0);
+    const [waves, setWaves] = useState([]);
+    const [waveContent, setWaveContent] = useState({
+        message: "",
+        amount: 0,
+        units: "ether",
     });
 
-    const waves = [
-        {
-            from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            message: "Hi!",
-            timestamp: new Date().getTime() / 1000,
-        },
-        {
-            from: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            message: "Hi!",
-            timestamp: new Date().getTime() / 1000,
-        },
-    ];
+    useEffect(() => {
+        checkUserAccounts(setAccount)();
+    });
+
+    useEffect(() => {
+        getTotalWaveCount(setTotalWaveCount)();
+    }, [account]);
 
     return (
         <div className="App">
             <NavBar
                 account={account}
-                connectWallet={connectWallet(window, setAccount)}
+                connectWallet={connectWallet(setAccount)}
             />
-            <Stats />
-            <WaveBox />
+            <Stats totalWaveCount={totalWaveCount} />
+            <WaveBox setWaveContent={setWaveContent} />
             <WaveList waves={waves} />
         </div>
     );

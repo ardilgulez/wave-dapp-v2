@@ -175,6 +175,11 @@ describe("WaveContract", function () {
         ).to.be.true;
     });
 
+    it("Should retrieve kagTokenAddress", async () => {
+        const kagTokenAddress = await waveContract.kagTokenAddress();
+        expect(kagTokenAddress).to.equal(kagToken.address);
+    });
+
     it("Should WaveContract mint new KAGTokens when it has a balance of lower than 1000", async () => {
         const [deployer] = await ethers.getSigners();
         const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {

@@ -12,11 +12,19 @@ import {
     wave,
     subscribeToNewWaves,
     getWaves,
+    getHighestContribution,
+    getHighestContributor,
+    getLoudestContribution,
+    getLoudestContributor,
 } from "./metamask-utils";
 
 const App = () => {
     const [account, setAccount] = useState(null);
     const [totalWaveCount, setTotalWaveCount] = useState(0);
+    const [highestContribution, setHighestContribution] = useState(0);
+    const [highestContributor, setHighestContributor] = useState(0);
+    const [loudestContribution, setLoudestContribution] = useState(0);
+    const [loudestContributor, setLoudestContributor] = useState(0);
     const [waves, setWaves] = useState([]);
     const [waveContent, setWaveContent] = useState({
         message: "",
@@ -47,7 +55,11 @@ const App = () => {
     }, [account]);
 
     useEffect(() => {
-        getTotalWaveCount(setTotalWaveCount);
+        getTotalWaveCount().then(setTotalWaveCount);
+        getHighestContribution().then(setHighestContribution);
+        getHighestContributor().then(setHighestContributor);
+        getLoudestContribution().then(setLoudestContribution);
+        getLoudestContributor().then(setLoudestContributor);
     }, [account, waves]);
 
     return (
@@ -56,7 +68,13 @@ const App = () => {
                 account={account}
                 connectWallet={connectWallet(setAccount)}
             />
-            <Stats totalWaveCount={totalWaveCount} />
+            <Stats
+                totalWaveCount={totalWaveCount}
+                highestContributor={highestContributor}
+                highestContribution={highestContribution}
+                loudestContributor={loudestContributor}
+                loudestContribution={loudestContribution}
+            />
             <WaveBox setWaveContent={setWaveContent} sendWave={sendWave} />
             <WaveList waves={waves} />
         </div>

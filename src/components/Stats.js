@@ -6,7 +6,13 @@ import Row from "react-bootstrap/Row";
 
 import "./Stats.css";
 
-const Stats = ({ totalWaveCount }) => {
+const Stats = ({
+    totalWaveCount,
+    highestContributor,
+    highestContribution,
+    loudestContributor,
+    loudestContribution,
+}) => {
     return (
         <div className="stats">
             <Container>
@@ -17,17 +23,15 @@ const Stats = ({ totalWaveCount }) => {
                     </Col>
                     <Col lg={4} className="stats-column">
                         <h2 className="stats-title">Biggest Waver:</h2>
-                        <p className="stats-item">5 ethers</p>
-                        <p className="stats-item">
-                            0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
-                        </p>
+                        <p className="stats-item">{`${highestContribution} ethers`}</p>
+                        <p className="stats-item">{highestContributor}</p>
                     </Col>
                     <Col lg={4} className="stats-column">
                         <h2 className="stats-title">Loudest Wavers:</h2>
-                        <p className="stats-item">5 times</p>
                         <p className="stats-item">
-                            0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266
+                            {loudestContribution} times
                         </p>
+                        <p className="stats-item">{loudestContributor}</p>
                     </Col>
                 </Row>
             </Container>

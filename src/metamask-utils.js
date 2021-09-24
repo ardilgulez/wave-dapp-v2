@@ -43,7 +43,7 @@ export const checkUserAccounts = async (callback) => {
     }
 };
 
-export const getTotalWaveCount = async (setTotalWaveCount) => {
+export const getTotalWaveCount = async () => {
     const { ethereum } = window;
     if (!ethereum) {
         console.log("Metamask not connected");
@@ -56,7 +56,85 @@ export const getTotalWaveCount = async (setTotalWaveCount) => {
             signer
         );
         const totalWaveCount = await waveContract.totalWaveCount();
-        setTotalWaveCount(totalWaveCount.toNumber());
+        return new Promise((resolve, reject) => {
+            resolve(totalWaveCount.toNumber());
+        });
+    }
+};
+
+export const getHighestContribution = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const highestContribution = await waveContract.highestContribution();
+        return new Promise((resolve, reject) => {
+            resolve(ethers.utils.formatEther(highestContribution));
+        });
+    }
+};
+
+export const getHighestContributor = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const highestContributor = await waveContract.highestContributor();
+        return new Promise((resolve, reject) => {
+            resolve(highestContributor);
+        });
+    }
+};
+
+export const getLoudestContribution = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const highestContribution = await waveContract.loudestContribution();
+        return new Promise((resolve, reject) => {
+            resolve(highestContribution.toString());
+        });
+    }
+};
+
+export const getLoudestContributor = async () => {
+    const { ethereum } = window;
+    if (!ethereum) {
+        console.log("Metamask not connected");
+    } else {
+        const provider = new ethers.providers.Web3Provider(ethereum);
+        const signer = provider.getSigner();
+        const waveContract = new ethers.Contract(
+            WAVE_CONTRACT_ADDRESS,
+            abi,
+            signer
+        );
+        const highestContributor = await waveContract.loudestContributor();
+        return new Promise((resolve, reject) => {
+            resolve(highestContributor);
+        });
     }
 };
 

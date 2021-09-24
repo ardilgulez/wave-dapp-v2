@@ -1,4 +1,3 @@
--   Implement highest and loudest wavers in the frontend
 -   Put `kagTokenAddress` in the frontend
 -   Get `dotenv` working again
 -   Deploy contracts to Rinkeby Testnet

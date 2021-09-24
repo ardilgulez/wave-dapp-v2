@@ -13,8 +13,6 @@ contract WaveContract is Ownable {
         uint256 amount;
         uint256 timestamp;
     }
-
-    Wave[] private waves;
     event NewWave(
         uint256 _id,
         address indexed _from,
@@ -23,8 +21,10 @@ contract WaveContract is Ownable {
         uint256 _timestamp
     );
 
+    Wave[] private waves;
     KAGToken private kagToken;
     address private _tokenAddress;
+    address[] private contributors;
 
     uint256 private waveCount;
     mapping(address => uint256) private walletToWaveCount;
@@ -46,8 +46,6 @@ contract WaveContract is Ownable {
                 timestamp: block.timestamp
             })
         );
-        walletToWaveCount[msg.sender] += 1;
-        walletToAmount[msg.sender] += msg.value;
         if (msg.value > 0) {
             kagToken.transfer(msg.sender, 1);
         }
@@ -55,6 +53,14 @@ contract WaveContract is Ownable {
         if (kagToken.balanceOf(address(this)) < 1000) {
             kagToken.mint(address(this), 1000);
         }
+
+        if (walletToWaveCount[msg.sender] == 0) {
+            contributors.push(msg.sender);
+        }
+
+        walletToWaveCount[msg.sender] += 1;
+        walletToAmount[msg.sender] += msg.value;
+
         emit NewWave(
             waveCount,
             msg.sender,
@@ -83,6 +89,48 @@ contract WaveContract is Ownable {
 
     function kagTokenAddress() external view returns (address) {
         return _tokenAddress;
+    }
+
+    function highestContributor() external view returns (address) {
+        uint256 amount = 0;
+        address holder;
+        for (uint256 i = 0; i < contributors.length; i++) {
+            if (walletToAmount[contributors[i]] > amount) {
+                holder = contributors[i];
+            }
+        }
+        return holder;
+    }
+
+    function highestContribution() external view returns (uint256) {
+        uint256 amount = 0;
+        for (uint256 i = 0; i < contributors.length; i++) {
+            if (walletToAmount[contributors[i]] > amount) {
+                amount = walletToAmount[contributors[i]];
+            }
+        }
+        return amount;
+    }
+
+    function loudestContributor() external view returns (address) {
+        uint256 amount = 0;
+        address holder;
+        for (uint256 i = 0; i < contributors.length; i++) {
+            if (walletToWaveCount[contributors[i]] > amount) {
+                holder = contributors[i];
+            }
+        }
+        return holder;
+    }
+
+    function loudestContribution() external view returns (uint256) {
+        uint256 amount = 0;
+        for (uint256 i = 0; i < contributors.length; i++) {
+            if (walletToWaveCount[contributors[i]] > amount) {
+                amount = walletToWaveCount[contributors[i]];
+            }
+        }
+        return amount;
     }
 
     function withdraw() public onlyOwner {

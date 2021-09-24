@@ -43,9 +43,12 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        getTotalWaveCount(setTotalWaveCount);
         getWaves().then((waves) => setWaves(waves));
     }, [account]);
+
+    useEffect(() => {
+        getTotalWaveCount(setTotalWaveCount);
+    }, [account, waves]);
 
     return (
         <div className="App">

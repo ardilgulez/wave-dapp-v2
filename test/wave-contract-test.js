@@ -192,4 +192,55 @@ describe("WaveContract", function () {
         );
         expect(waveContractKagBalance).to.equal(1999);
     });
+
+    it("Should retrieve highestContribution", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const highestContribution = await waveContract.highestContribution();
+        expect(highestContribution.toBigInt()).to.equal(
+            ethers.utils.parseEther("1000").toBigInt()
+        );
+    });
+
+    it("Should retrieve highestContributor", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const highestContributor = await waveContract.highestContributor();
+        expect(highestContributor.toString()).to.equal(deployer.address);
+    });
+
+    it("Should retrieve loudestContribution", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const loudestContribution = await waveContract.loudestContribution();
+        expect(loudestContribution.toNumber()).to.equal(1);
+    });
+
+    it("Should retrieve loudestContributor", async () => {
+        const [deployer] = await ethers.getSigners();
+        const waveTxn = await waveContract.connect(deployer).wave("Hi there!", {
+            value: ethers.utils.parseEther("1000"),
+        });
+        await waveTxn.wait();
+
+        const loudestContributor = await waveContract.loudestContributor();
+        expect(loudestContributor.toString()).to.equal(deployer.address);
+    });
+
+    it("Should retrieve kagTokenAddress", async () => {
+        const kagTokenAddress = await waveContract.kagTokenAddress();
+        expect(kagTokenAddress).to.equal(kagToken.address);
+    });
 });

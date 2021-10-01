@@ -7,9 +7,8 @@ import "./WaveList.css";
 const WaveList = ({ waves }) => {
     return (
         <Container className="wave-list-container">
-            {waves.map((wave, index) => (
-                <Wave wave={wave} key={index} />
-            ))}
+            {waves &&
+                waves.map((wave, index) => <Wave wave={wave} key={index} />)}
         </Container>
     );
 };

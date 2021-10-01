@@ -1,0 +1,9 @@
+.disconnected-wavebox-header {
+    width: fit-content !important;
+}
+
+.disconnected-wavebox {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}

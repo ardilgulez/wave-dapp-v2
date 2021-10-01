@@ -16,7 +16,9 @@ import {
     getHighestContributor,
     getLoudestContribution,
     getLoudestContributor,
+    KAG_TOKEN_ADDRESS,
 } from "./metamask-utils";
+import DisconnectedWaveBox from "./components/DisconnectedWaveBox";
 
 const App = () => {
     const [account, setAccount] = useState(null);
@@ -34,7 +36,6 @@ const App = () => {
 
     const sendWave = () => {
         wave(waveContent).then((receipt) => {
-            console.log(receipt);
             setWaveContent({
                 message: "",
                 amount: 0,
@@ -68,14 +69,20 @@ const App = () => {
                 account={account}
                 connectWallet={connectWallet(setAccount)}
             />
-            <Stats
-                totalWaveCount={totalWaveCount}
-                highestContributor={highestContributor}
-                highestContribution={highestContribution}
-                loudestContributor={loudestContributor}
-                loudestContribution={loudestContribution}
-            />
-            <WaveBox setWaveContent={setWaveContent} sendWave={sendWave} />
+            {account && (
+                <Stats
+                    totalWaveCount={totalWaveCount}
+                    highestContributor={highestContributor}
+                    highestContribution={highestContribution}
+                    loudestContributor={loudestContributor}
+                    loudestContribution={loudestContribution}
+                />
+            )}
+            {account ? (
+                <WaveBox setWaveContent={setWaveContent} sendWave={sendWave} />
+            ) : (
+                <DisconnectedWaveBox />
+            )}
             <WaveList waves={waves} />
         </div>
     );

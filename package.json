@@ -28,6 +28,7 @@
         "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
+        "postinstall": "hardhat compile",
         "hardhat": "hardhat",
         "hardhat:deploy": "hardhat run scripts/deploy.js"
     },

@@ -27,7 +27,7 @@ const Stats = ({
                         <p className="stats-item">{highestContributor}</p>
                     </Col>
                     <Col lg={4} className="stats-column">
-                        <h2 className="stats-title">Loudest Wavers:</h2>
+                        <h2 className="stats-title">Loudest Waver:</h2>
                         <p className="stats-item">
                             {loudestContribution} times
                         </p>

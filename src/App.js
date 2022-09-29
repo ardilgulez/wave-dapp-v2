@@ -52,15 +52,39 @@ const App = () => {
     }, []);
 
     useEffect(() => {
-        getWaves().then((waves) => setWaves(waves));
+        getWaves()
+            .then((waves) => setWaves(waves))
+            .catch((e) => {
+                console.error(e);
+            });
     }, [account]);
 
     useEffect(() => {
-        getTotalWaveCount().then(setTotalWaveCount);
-        getHighestContribution().then(setHighestContribution);
-        getHighestContributor().then(setHighestContributor);
-        getLoudestContribution().then(setLoudestContribution);
-        getLoudestContributor().then(setLoudestContributor);
+        getTotalWaveCount()
+            .then(setTotalWaveCount)
+            .catch((e) => {
+                console.error(e);
+            });
+        getHighestContribution()
+            .then(setHighestContribution)
+            .catch((e) => {
+                console.error(e);
+            });
+        getHighestContributor()
+            .then(setHighestContributor)
+            .catch((e) => {
+                console.error(e);
+            });
+        getLoudestContribution()
+            .then(setLoudestContribution)
+            .catch((e) => {
+                console.error(e);
+            });
+        getLoudestContributor()
+            .then(setLoudestContributor)
+            .catch((e) => {
+                console.error(e);
+            });
     }, [account, waves]);
 
     return (

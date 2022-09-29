@@ -28,6 +28,6 @@ node_modules
 #Hardhat files
 cache
 artifacts
-networks/chain.config.json
-networks/localhost.config.json
-networks/hardhat.config.json
+src/networks/chain.config.json
+src/networks/localhost.config.json
+src/networks/hardhat.config.json

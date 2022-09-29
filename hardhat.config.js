@@ -25,5 +25,8 @@ module.exports = {
         hardhat: {
             chainId: 1337,
         },
+        chain: {
+            url: "http://chain:8545",
+        },
     },
 };

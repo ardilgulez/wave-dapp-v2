@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+    dapp:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000"
+        volumes:
+            - .:/app
+        depends_on:
+            - chain
+        entrypoint: ./entrypoint.sh
+        command: ["/bin/bash", "./entrypoint.sh"]
+        environment:
+            - NETWORK=chain
+
+    chain:
+        image: "trufflesuite/ganache:v7.4.3"
+        ports:
+            - "8545:8545"

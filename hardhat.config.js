@@ -28,5 +28,8 @@ module.exports = {
         chain: {
             url: "http://chain:8545",
         },
+        host: {
+            url: "http://host.docker.internal:8545",
+        },
     },
 };

@@ -1,6 +1,6 @@
 import { ethers } from "ethers";
 import { abi } from "./artifacts/contracts/WaveContract.sol/WaveContract.json";
-import networkConfig from "./networks/chain.config.json";
+import networkConfig from "./networks/host.config.json";
 
 export const WAVE_CONTRACT_ADDRESS = networkConfig.waveContractAddress;
 export const KAG_TOKEN_ADDRESS = networkConfig.kagTokenAddress;

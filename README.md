@@ -1,15 +1,9 @@
-# Basic Sample Hardhat Project
+# Wave dApp
 
-This project demonstrates a basic Hardhat use case. It comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts.
+## How to start
 
-Try running some of the following tasks:
+1- Start a local blockchain at chainId = 1337
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-node scripts/sample-script.js
-npx hardhat help
-```
+2- Build the docker container by `docker build -t <tag_name> .`
+
+3- Start the docker container by `docker run -d -p 3000:3000 <tag_name>`
